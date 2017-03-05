@@ -39,15 +39,17 @@ function displayAllPlayers() {
   return new sql.Request().query(
     'SELECT TOP 100 username, fName, lName, email, levelID FROM dbo.Player ORDER BY playerID DESC');
 }
-function getPlayerObject(PersonID) {
-    return new sql.Request().query('SELECT * FROM dbo.PERSON WHERE PersonID =' + PersonID);
-}
-function updatePlayerLevel(PersonID) {
+
+function updatePlayerLevel(PPlayerID) {
     console.log("got in method")
-    return new sql.Request().query('UPDATE Players SET levelID=100 WHERE PersonID =' + PersonID);
+    return new sql.Request().query('UPDATE Player SET username = isuck  WHERE PlayerID = ' + PPlayerID);
 }
 
+function deletePlayer(PPlayerID) {
+  console.log("got in delete")
+  return new sql.Request().query('DELETE Player WHERE PlayerID = ' + PPlayerID);  
 
+}
 
 
 //ROUTES
@@ -65,11 +67,21 @@ function makeRouter() {
       });
     })
 
-    app.post('/updateLevel/:PlayerID', function (req, res) {
-      console.log("got to router")
-      updatePlayerLevel(PlayerID).then(function (data) {
-        return res.json(data);
-      });
+    app.post('/', function (req, res) {
+      var PPlayerID = req.body.PlayerID
+      var WhatToDo = req.body.whatToDo
+      if(WhatToDo = 'updateLevel'){
+        console.log("got to update")
+        updatePlayerLevel(PPlayerID).then(function (data) {
+          return res.json(data);
+        });
+      }
+      if(WhatToDo = 'delete'){
+        console.log("got to update")
+        deletePlayer(PPlayerID).then(function (data) {
+          return res.json(data);
+        });
+      }
     });
 }
 

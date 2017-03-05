@@ -41,8 +41,7 @@ function getPlayers() {
 }
 
 function updateLevel(PlayerID) {
-  console.log("got to update level")
-  window.location.href = "/updateLevel/" + PlayerID;
+    //window.location.href = "/" + PlayerID;
 }
 
 function deletePerson(PersonID) {
