@@ -41,13 +41,13 @@ function displayAllPlayers() {
 }
 
 function updatePlayerLevel(PPlayerID) {
-    console.log("got in method")
+    console.log("got in update level method")
     return new sql.Request().query('UPDATE Player SET username = isuck  WHERE PlayerID = ' + PPlayerID);
 }
 
 function deletePlayer(PPlayerID) {
-  console.log("got in delete")
-  return new sql.Request().query('DELETE Player WHERE PlayerID = ' + PPlayerID);  
+  console.log("got in delete method")
+  return new sql.Request().query('DELETE FROM Player WHERE PlayerID = ' + PPlayerID);  
 
 }
 
@@ -70,14 +70,14 @@ function makeRouter() {
     app.post('/', function (req, res) {
       var PPlayerID = req.body.PlayerID
       var WhatToDo = req.body.whatToDo
-      if(WhatToDo = 'updateLevel'){
-        console.log("got to update")
+      if(WhatToDo == 'updateLevel'){
+        console.log("got to update if")
         updatePlayerLevel(PPlayerID).then(function (data) {
           return res.json(data);
         });
       }
-      if(WhatToDo = 'delete'){
-        console.log("got to update")
+      if(WhatToDo == 'delete'){
+        console.log("got to delete if")
         deletePlayer(PPlayerID).then(function (data) {
           return res.json(data);
         });
