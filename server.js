@@ -1,6 +1,3 @@
-
-
-console.log("here?")
 var sql = require('mssql')
 var express = require('express')
 var cors = require('cors')
@@ -40,22 +37,40 @@ function displayAllPlayers() {
     'SELECT TOP 100 username, fName, lName, email, levelID FROM dbo.Player ORDER BY playerID DESC');
 }
 
-function updatePlayerLevel(PPlayerID) {
-    console.log("got in update level method")
-    return new sql.Request().query('UPDATE Player SET username = isuck  WHERE PlayerID = ' + PPlayerID);
+// This will update the player level
+// Takes player first name, last name, email, and level
+function updatePlayerLevel(data) {
+    var fName = data.fname;
+    var lName = data.lname;
+    var email = data.email;
+    var level = data.level;
+
+    if (!fName || !lName || !email || !level)
+    {      
+        console.log('Error: [updatePlayerLevel] Missing fname, lname, email, or level');
+        return null;
+    }
+    return new sql.Request().query("UPDATE Player SET levelID = " + level + " WHERE fName='" + fName + "' AND lName='" + lName + "' AND email='" + email + "'");
 }
 
-function deletePlayer(PPlayerID) {
-  console.log("got in delete method")
-  return new sql.Request().query('DELETE FROM Player WHERE PlayerID = ' + PPlayerID);  
+function deletePlayer(data) {
+    var fName = data.fname;
+    var lName = data.lname;
+    var email = data.email;
 
+    if (!fName || !lName || !email)
+    {      
+        console.log('Error: [deletePlayer] Missing fname, lname, or email');
+        return null;
+    }
+
+    return new sql.Request().query("DELETE FROM Player WHERE fName='" + fName + "' AND lName='" + lName + "' AND email='" + email + "'");
 }
-
 
 //ROUTES
 function makeRouter() {
     app.use(cors())  
-    console.log("please");
+    console.log("Creating routes");
     // frames
     app.get('/', function (req, res) {
       res.sendFile('/static/views/index.html', { root: __dirname })
@@ -70,23 +85,54 @@ function makeRouter() {
     app.post('/', function (req, res) {
       var PPlayerID = req.body.PlayerID
       var WhatToDo = req.body.whatToDo
-      if(WhatToDo == 'updateLevel'){
-        console.log("got to update if")
-        updatePlayerLevel(PPlayerID).then(function (data) {
-          return res.json(data);
-        });
+      switch (WhatToDo)
+      {
+          case 'updatePlayerLevel':
+          {
+              updatePlayerLevel(req.body).then(function ()
+              {
+                  res.redirect('/');
+              });
+              break;
+          }
+          case 'deletePlayer':
+          {
+              deletePlayer(req.body).then(function()
+              {                
+                  return res.redirect('/');
+              });
+              break;
+          }
+          default:
+          {
+              console.log('Unknown form type');
+              break;
+          }
       }
-      if(WhatToDo == 'delete'){
-        console.log("got to delete if")
-        deletePlayer(PPlayerID).then(function (data) {
-          return res.json(data);
-        });
-      }
+      // if(WhatToDo == 'updatePlayerLevel')
+      // {      
+      //   updatePlayerLevel(req.body).then(function (data) {
+      //     return res.json(data);
+      //   });
+      // }
+      // else if(WhatToDo == 'deletePlayer'){
+      //   console.log("got to delete if")
+      //   deletePlayer(req.body).then(function (data) {
+      //       if (data)
+      //       {
+      //           return res.json(data);
+      //       } 
+      //       else
+      //       {
+      //           console.log('Error getting data from SQL');
+      //       }
+      //   });
+      // } else if ()
     });
 }
 
 function startParty() {
-  console.log("party");
+  console.log("Connecting to rocket_db");
   connectToDb().then(() => {
     makeRouter();
     app.listen(process.env.PORT || 3000);
