@@ -67,6 +67,24 @@ function deletePlayer(data) {
     return new sql.Request().query("DELETE FROM Player WHERE fName='" + fName + "' AND lName='" + lName + "' AND email='" + email + "'");
 }
 
+
+function insertPlayer(data) {
+    var fName = data.fname;
+    var lName = data.lname;
+    var email1 = data.email;
+    var username1 = data.username
+    var levelID = data.level
+
+    if (!fName || !lName || !email)
+    {      
+        console.log('Error: [deletePlayer] Missing fname, lname, or email');
+        return null;
+    }
+
+    return new sql.Request().query("INSERT INTO dbo.Player(username, fName, lName, email, levelID, datecreated) \
+                                   VALUES(" + username1 + ", " + fName + ", " + lName + ", " + levelID +", (SELECT GETDATE()))");
+}
+
 //ROUTES
 function makeRouter() {
     app.use(cors())  
@@ -102,6 +120,14 @@ function makeRouter() {
                   return res.redirect('/');
               });
               break;
+          }
+          case 'insertPlayer':
+          {
+              insertPlayer(req.body).then(function()
+              {
+                  return res.redirect('/')
+              });
+
           }
           default:
           {
