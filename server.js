@@ -75,14 +75,14 @@ function insertPlayer(data) {
     var username1 = data.username;
     var levelID = data.level;
 
-    if (!fName || !lName || !email)
+    if (!fName || !lName || !email1)
     {      
-        console.log('Error: [deletePlayer] Missing fname, lname, or email');
+        console.log('Error: [insertPlayer] Missing fname, lname, or email');
         return null;
     }
 
     return new sql.Request().query("INSERT INTO dbo.Player(username, fName, lName, email, levelID, datecreated) \
-                                   VALUES(" + username1 + ", " + fName + ", " + lName + ", " + levelID +", (SELECT GETDATE()))");
+                                   VALUES('" + username1 + "', '" + fName + "', '" + lName + "', '" + email1 +"', " + levelID +", (SELECT GETDATE()))");
 }
 
 //ROUTES
@@ -103,7 +103,6 @@ function makeRouter() {
     app.post('/', function (req, res) {
       var PPlayerID = req.body.PlayerID
       var WhatToDo = req.body.whatToDo
-      console.log("insert");
       switch (WhatToDo)
       {
           case 'updatePlayerLevel':
@@ -124,12 +123,11 @@ function makeRouter() {
           }
           case 'insertPlayer':
           {
-            console.log("insertmethod");
               insertPlayer(req.body).then(function()
               {
                   return res.redirect('/')
               });
-
+              break;
           }
           default:
           {
