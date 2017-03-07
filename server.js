@@ -72,8 +72,8 @@ function insertPlayer(data) {
     var fName = data.fname;
     var lName = data.lname;
     var email1 = data.email;
-    var username1 = data.username
-    var levelID = data.level
+    var username1 = data.username;
+    var levelID = data.level;
 
     if (!fName || !lName || !email)
     {      
@@ -103,6 +103,7 @@ function makeRouter() {
     app.post('/', function (req, res) {
       var PPlayerID = req.body.PlayerID
       var WhatToDo = req.body.whatToDo
+      console.log("insert");
       switch (WhatToDo)
       {
           case 'updatePlayerLevel':
@@ -123,6 +124,7 @@ function makeRouter() {
           }
           case 'insertPlayer':
           {
+            console.log("insertmethod");
               insertPlayer(req.body).then(function()
               {
                   return res.redirect('/')
