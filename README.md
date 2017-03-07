@@ -1,5 +1,5 @@
-# INFO445 MS Drinks App
-Implemented using Microsoft SQL Server, express.js, and JQuery. Keeps track of the drinks in the Fridge.
+# INFO445 Rocket League Database App
+Implemented using Microsoft SQL Server, express.js, and JQuery.
 
 To get this up and running follow these steps:
 
@@ -11,4 +11,3 @@ The app should be running on http://localhost:3000
 
 To stop the server, hit Ctrl+c
 
-![alt tag](https://github.com/arnavd96/MS_DrinksApp/blob/master/Screenshot.JPG)
