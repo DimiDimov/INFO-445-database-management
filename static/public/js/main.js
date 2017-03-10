@@ -41,7 +41,7 @@ function getPlayers() {
 }
 
 function updateLevel(PlayerID) {
-    //window.location.href = "/" + PlayerID;
+  
 }
 
 function deletePerson(PersonID) {
